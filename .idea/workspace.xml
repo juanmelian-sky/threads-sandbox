@@ -5,8 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="22e584d3-7a18-47e7-8620-187a4442d6d3" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/uk/sky/ovp/kronos/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/uk/sky/ovp/kronos/Main.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -99,7 +97,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1696600965881</updated>
-      <workItem from="1696600966882" duration="6519000" />
+      <workItem from="1696600966882" duration="7270000" />
     </task>
     <servers />
   </component>

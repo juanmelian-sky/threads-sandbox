@@ -6,26 +6,28 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ForkJoinPool;
 import java.util.function.Supplier;
 
 public class Main {
     public static void main(String[] args) throws ExecutionException, InterruptedException {
 
         /*
-         *               OVP KRONOS - VIRTUAL THREADS DEMO
-         *
+         *  ----------------------------------------------------------------
+         *                 OVP KRONOS - VIRTUAL THREADS DEMO
+         *  ----------------------------------------------------------------
          * 1 - Fixed size pool  =>  Executors.newFixedThreadPool(10)
          * 2 - ForkJoinPool     =>  ForkJoinPool.commonPool()
          * 3 - Virtual Threads  =>  Executors.newVirtualThreadPerTaskExecutor()
+         *  ----------------------------------------------------------------
          */
-
-        generateNTaskWithExecutor(1_000_000, Executors.newVirtualThreadPerTaskExecutor());
+        generateNTaskWithExecutor(1_000_000, DemoExecutorType.FIXED_CACHED_POOL);
     }
 
-    private static void generateNTaskWithExecutor(int numberOfTasks, ExecutorService executor) throws InterruptedException, ExecutionException {
+    private static void generateNTaskWithExecutor(int numberOfTasks, DemoExecutorType executorType) throws InterruptedException, ExecutionException {
 
         List<CompletableFuture<Integer>> futures = new ArrayList<>();
-        try (ExecutorService service = executor) {
+        try (ExecutorService service = executorForType(executorType)) {
 
             for (int i = 0; i < numberOfTasks; i++) {
                 System.out.println("Submitting task " + i);
@@ -42,6 +44,14 @@ public class Main {
         }
     }
 
+    private static ExecutorService executorForType(DemoExecutorType executorType) {
+        return switch (executorType) {
+            case FORK_JOIN_POOL -> ForkJoinPool.commonPool();
+            case FIXED_CACHED_POOL ->  Executors.newFixedThreadPool(10);
+            case VIRTUAL_THREADS ->  Executors.newVirtualThreadPerTaskExecutor();
+        };
+    }
+
     private static Supplier<Integer> getTask(int taskNumber) {
         return () -> {
             try {
@@ -51,5 +61,11 @@ public class Main {
                 throw new RuntimeException(e);
             }
         };
+    }
+
+    private enum DemoExecutorType {
+        FIXED_CACHED_POOL,
+        FORK_JOIN_POOL,
+        VIRTUAL_THREADS
     }
 }
