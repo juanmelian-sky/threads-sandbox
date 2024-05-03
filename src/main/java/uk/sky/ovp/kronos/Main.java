@@ -21,7 +21,7 @@ public class Main {
          * 3 - Virtual Threads  =>  Executors.newVirtualThreadPerTaskExecutor()
          *  ----------------------------------------------------------------
          */
-        generateNTaskWithExecutor(1_000_000, DemoExecutorType.FIXED_CACHED_POOL);
+        generateNTaskWithExecutor(1_000_000, DemoExecutorType.VIRTUAL_THREADS);
     }
 
     private static void generateNTaskWithExecutor(int numberOfTasks, DemoExecutorType executorType) throws InterruptedException, ExecutionException {
@@ -39,7 +39,7 @@ public class Main {
                 futures.add(future);
             }
              CompletableFuture.allOf(futures.toArray(new CompletableFuture[futures.size()]))
-                    .thenAccept(taskNumber -> System.out.println("Program completed!"))
+                    .thenAccept(f -> System.out.println("Program completed!"))
                     .get();
         }
     }
@@ -47,7 +47,7 @@ public class Main {
     private static ExecutorService executorForType(DemoExecutorType executorType) {
         return switch (executorType) {
             case FORK_JOIN_POOL -> ForkJoinPool.commonPool();
-            case FIXED_CACHED_POOL ->  Executors.newFixedThreadPool(10);
+            case FIXED_CACHED_POOL ->  Executors.newFixedThreadPool(10); // Same as available processors (sysctl -n hw.ncpu)
             case VIRTUAL_THREADS ->  Executors.newVirtualThreadPerTaskExecutor();
         };
     }
